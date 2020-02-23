@@ -1,8 +1,14 @@
+using EnglishCollector.DataAccessLayer;
+using EnglishCollector.DataAccessLayer.Interfaces;
+using EnglishCollector.DataAccessLayer.Repositories;
+using EnglishCollector.DataLogicLayer.Interfaces;
+using EnglishCollector.DataLogicLayer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +34,24 @@ namespace EnglishCollector
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<DtbContext>(options => options.UseSqlServer(connection));
+
+            // Service dependencies
+            services.AddScoped<IVocabularyRepository, VocabularyRepository>();
+            services.AddScoped<ICardRepository, CardRepository>();
+
+            services.AddScoped<IVocabularyService, VocabularyService>();
+            services.AddScoped<ICardService, CardService>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Fix json looping
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
