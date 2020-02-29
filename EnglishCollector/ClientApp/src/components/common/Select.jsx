@@ -17,14 +17,15 @@ export class Select extends React.Component {
         } else {
             return <React.Fragment>
                 <Label for={id} sm={2}>{label}</Label>
-                <Input type="select" name={id} onChange={this.props.onChange} id={id}>
+                <Input type="select" 
+                    id={id} name={id} 
+                    value={this.props.value} 
+                    onChange={this.props.onChange} 
+                    >
                     {options.map(function(option){
-                        if(option.value === value){
-                            return <option value={option.value} selected>{option.label}</option>
-                        } else {
-                            return <option value={option.value}>{option.label}</option>
-                        }
-                        
+                        return <option value={option.value} key={id + "_" + option.value}>
+                                {option.label}
+                            </option>
                     })}
                 </Input>
             </React.Fragment>

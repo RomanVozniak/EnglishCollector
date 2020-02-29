@@ -45,27 +45,25 @@ export class VocabularyRowEdit extends React.Component {
     }
 
     render(){
-        console.log(this.props.cards);
-
         return <React.Fragment>
-        <tr>
-            <td>{this.props.index}</td>
-            <td><Input type="text" name="phrase" value={this.props.row.phrase} placeholder="phrase" onChange={this.handleInputChange} /></td>
-            <td><Input type="text" name="translation" value={this.props.row.translation} placeholder="translation" onChange={this.handleInputChange} /></td>
-            <td>
-                <span className="icon-separate"><MdDone onClick={this.onSave}/></span>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td colSpan="2"><Input type="text" name="description" value={this.props.row.description} placeholder="description" onChange={this.handleInputChange} /></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <Select id="cardId" options={this.cardsOptions} value={this.props.row.cardId} label={"Card"} onChange={this.handleInputChange} />
-            </td>
-        </tr>
+            <tr>
+                <td>{this.props.index}</td>
+                <td><Input type="text" name="phrase" value={this.props.row.phrase} placeholder="phrase" onChange={this.handleInputChange} /></td>
+                <td><Input type="text" name="translation" value={this.props.row.translation} placeholder="translation" onChange={this.handleInputChange} /></td>
+                <td>
+                    <span className="icon-separate"><MdDone onClick={this.onSave}/></span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colSpan="2"><Input type="text" name="description" value={this.props.row.description} placeholder="description" onChange={this.handleInputChange} /></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <Select id="cardId" options={this.cardsOptions} value={this.props.row.cardId} label={"Card"} onChange={this.handleInputChange} />
+                </td>
+            </tr>
         </React.Fragment>
     }
 }
