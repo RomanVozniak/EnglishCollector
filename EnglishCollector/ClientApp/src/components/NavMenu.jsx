@@ -13,7 +13,7 @@ export class NavMenu extends React.Component {
                 <NavbarBrand tag={Link} to=""> English Collector </NavbarBrand>
                 <Nav>
                     <NavItem>
-                        <NavLink tag={Link} to="/Vocabulary/VocabularyGrid"> Vocabulary </NavLink>
+                        <NavLink tag={Link} to="/vocabulary/VocabularyGrid"> Vocabulary </NavLink>
                     </NavItem>
                 </Nav>
             </Navbar>
