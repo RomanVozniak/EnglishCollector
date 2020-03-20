@@ -2,9 +2,9 @@
 export var api = {
     vocabulary: {
         getVocabulary: "/api/vocabulary",
-        createVocabulary: "/api/vocabulary/create",
-        updateVocabulary: "/api/vocabulary/update",
-        deleteVocabulary: "/api/vocabulary/delete/",
+        createVocab: "/api/vocabulary/create",
+        updateVocab: "/api/vocabulary/update",
+        deleteVocab: "/api/vocabulary/delete/",
         rememberryImport: "/api/vocabulary/rememberryImport"
     },
     cards: {

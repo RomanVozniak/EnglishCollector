@@ -9,6 +9,7 @@ using EnglishCollector.DataLogicLayer.Interfaces;
 using EnglishCollector.DataAccessLayer.Models;
 using AutoMapper;
 using EnglishCollector.Communication;
+using EnglishCollector.Functions;
 
 namespace EnglishCollector.Controllers
 {
@@ -17,15 +18,19 @@ namespace EnglishCollector.Controllers
     public class VocabularyController : ControllerBase
     {
         private readonly IVocabularyService _vocabularyService;
+        private readonly ICardService _cardService;
         private  IMapper _mapper { get; set; }
 
-        public VocabularyController(IVocabularyService vocabularyService)
+        public VocabularyController(IVocabularyService vocabularyService, ICardService cardService)
         {
             _vocabularyService = vocabularyService;
+            _cardService = cardService;
             _mapper = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<VocabularyDTO, VocabularyDAL>();
                 cfg.CreateMap<VocabularyDAL, VocabularyDTO>();
+                cfg.CreateMap<CardDAL, CardDTO>();
+                cfg.CreateMap<CardDTO, CardDAL>();
             }).CreateMapper();
         }
         
@@ -87,32 +92,59 @@ namespace EnglishCollector.Controllers
 
         [Route("/api/{controller}/rememberryImport")]
         [HttpPost]
-        public IActionResult ImportRememberry([FromBody] RememberryDTO rememberryData)
+        public IActionResult ImportRememberry([FromBody] ImportVocabularyDTO importVocabularyDTO)
         {
-            string errorMessages = ""; 
-            foreach(var item in rememberryData.cards)
-            {
-                VocabularyDAL vocabularyDAL = new VocabularyDAL();
-                vocabularyDAL.Phrase = item.O;
-                vocabularyDAL.Translation = item.T.First<string>();
-                vocabularyDAL.CardId = 10;
-                vocabularyDAL.ComplexityId = 2;
-                vocabularyDAL.ImportanceId = 2;
+            int? cardId = importVocabularyDTO.cardId;
+            RememberryDTO rememberryData = importVocabularyDTO.rememberryData;
 
-                VocabularyResponse response = _vocabularyService.CreateVocabulary(vocabularyDAL);
-                if (!response.Success)
+            if (!FB.IsNothing(importVocabularyDTO.newCardName))
+            {
+                CardDTO newCardDTO = new CardDTO();
+                newCardDTO.Title = importVocabularyDTO.newCardName;
+
+                CardDAL cardDAL = _mapper.Map<CardDAL>(newCardDTO);
+                CardResponse response = _cardService.CreateCard(cardDAL);
+
+                if (response.Success)
                 {
-                    errorMessages += response.Message + "\n";
+                    cardId = response.Card.Id;
                 }
-
+                else
+                {
+                    cardId = null;
+                }
             }
-            if(errorMessages == "")
+
+            if (!FB.IsNothing(cardId))
             {
-                return BadRequest(errorMessages);
+                string errorMessages = "";
+                foreach (var item in rememberryData.cards)
+                {
+                    VocabularyDAL vocabularyDAL = new VocabularyDAL();
+                    vocabularyDAL.Phrase = item.O;
+                    vocabularyDAL.Translation = item.T.First<string>();
+                    vocabularyDAL.CardId = cardId;
+                    vocabularyDAL.ComplexityId = 2;
+                    vocabularyDAL.ImportanceId = 2;
+
+                    VocabularyResponse response = _vocabularyService.CreateVocabulary(vocabularyDAL);
+                    if (!response.Success)
+                    {
+                        errorMessages += response.Message + "\n";
+                    }
+                }
+                if (!FB.IsNothing(errorMessages))
+                {
+                    return BadRequest(errorMessages);
+                }
+                else
+                {
+                    return Ok(rememberryData);
+                }
             }
             else
             {
-                return Ok(rememberryData);
+                return BadRequest("Card was not created");
             }
         }
     }

@@ -38,7 +38,7 @@ namespace EnglishCollector.Controllers
             return cards;
         }
 
-        [Route("/api/{controller}/get/{id}")]
+        [Route("/api/cards/get/{id}")]
         [HttpGet]
         public IActionResult Get([FromRoute] int id)
         {
