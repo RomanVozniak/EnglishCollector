@@ -18,7 +18,7 @@ namespace EnglishCollector.DataAccessLayer.Repositories
 
         public IQueryable<CardDAL> GetAll()
         {
-            var cardList = _context.Cards.AsQueryable<CardDAL>().OrderBy(card => card.OrderId);
+            var cardList = _context.Cards.AsQueryable<CardDAL>().OrderByDescending(card => card.Id);
             return cardList;
         }
 

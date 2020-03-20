@@ -1,62 +1,50 @@
+// redux
 import React from 'react'
-import { VocabularyTable } from './VocabularyTable';
-import { api, convertToSelectOptions, test } from '../../js/globalJs'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { fetchGetVocabulary, fetchGetCards } from './../../actions/vocabulary'
+import { getVocabulary } from '../../reducers/rootReducer'
+// components
+import { VocabularyTable } from './VocabularyTable'
+import VocabCreate from './VocabCreate'
+import VocabularyFilter from './VocabularyFilter'
+import VocabularyPlay from './VocabularyPlay'
 
 
-export class VocabularyGrid extends React.Component {
+class VocabularyGrid extends React.Component {
     constructor(props){
         super(props);
+    }
 
-        this.state = {
-            filter: { },
-            vocabulary: null,
-            cards: null,
-            cardId: null
+    componentDidMount(){
+        if(!this.props.fetched){
+            this.props.fetchGetCards();
+            this.props.fetchGetVocabulary();
         }
-
-        this.loadVocabulary = this.loadVocabulary.bind(this);
-        this.loadcards = this.loadcards.bind(this);
     }
 
     render(){
+        let vocabulary = this.props.vocabulary;
+
         return <React.Fragment>
-            <VocabularyTable 
-                vocabulary={this.state.vocabulary}
-                cards={this.state.cards}
-                onSave={() => this.loadVocabulary2()}/>
+            <div><VocabularyFilter /></div>
+            <div><VocabularyPlay /></div>
+            <div><VocabCreate /></div>
+            <div><VocabularyTable vocabulary={vocabulary}/></div>
         </React.Fragment>
-    }
+    }   
+}
 
-
-    componentWillMount(){
-        Promise.all([this.loadVocabulary(), this.loadcards()])
-            .then(([_vocabulary, _cards]) => {
-                this.setState({
-                    vocabulary: _vocabulary,
-                    cards: _cards
-                });
-            });
-    }
-
-    loadVocabulary(){
-        return fetch(api.vocabulary.getVocabulary + "?" + "cardId=" + this.state.cardId)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function(data){
-                return data;
-            });
-    }
-
-    loadcards() {
-        return fetch(api.cards.getCards)
-            .then(function (response) {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    alert(api.cards.getCards + ": " + response.status);
-                    return null;
-                }
-            });
+const mapStateToProps = (state) => {
+    return {
+        vocabulary: getVocabulary(state),
+        fetched: state.fetched
     }
 }
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+    fetchGetVocabulary: fetchGetVocabulary,
+    fetchGetCards: fetchGetCards
+}, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(VocabularyGrid);

@@ -12,7 +12,7 @@ export class VocabularyTable extends React.Component {
             return <React.Fragment />
         }
 
-        let _this = this;
+        let cards = this.props.cards;
         let count = this.props.vocabulary.length;
 
         return <React.Fragment>
@@ -31,8 +31,7 @@ export class VocabularyTable extends React.Component {
                             key={row.id}
                             row={row} 
                             index={count - index} 
-                            cards={_this.props.cards}
-                            onSave={() => _this.props.onSave}/>
+                            cards={cards}/>
                     })}
                 </tbody>
             </Table>
