@@ -16,7 +16,10 @@ export class NavMenu extends React.Component {
                         <NavLink tag={Link} to='/cards/CardsGrid'> Cards </NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink tag={Link} to="/vocabulary/VocabularyGrid"> Vocabulary </NavLink>
+                        <NavLink tag={Link} to="/vocabulary"> Vocabulary </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink tag={Link} to="/vocabularytest"> Vocabulary Test </NavLink>
                     </NavItem>
                     <NavItem>
                         <NavLink tag={Link} to="/import/VocabularyImport"> Import </NavLink>

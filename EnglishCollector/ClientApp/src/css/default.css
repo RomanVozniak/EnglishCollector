@@ -15,3 +15,11 @@
 .without-label-align {
     margin-top: 37px;
 }
+
+/* vocab test page*/
+.run-test-table th, run-test-table td, run-test-table {
+    width: 30%;
+}
+.run-test-table .big-text {
+    font-size: 24px;
+}
