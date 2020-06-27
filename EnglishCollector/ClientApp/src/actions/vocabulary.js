@@ -137,4 +137,7 @@ export const fetchImportVocabulary = (data) => {
         },
         body: JSON.stringify(data)
     })
+    .then(function (response) {
+        alert("Data were imported: " + response.status);
+    });
 }

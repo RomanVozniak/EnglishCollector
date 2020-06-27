@@ -13,7 +13,8 @@ class VocabularyPlay extends React.Component {
             lang: "en",
             text: null,
             vocabIndex: null,
-            circle: 0
+            circle: 0,
+            endlessPlaying: false
         }
     }
 
@@ -39,10 +40,10 @@ class VocabularyPlay extends React.Component {
             let circle = this.state.circle;
             let enFirst = this.state.enFirst;
             if(vocabIndex >= this.props.vocabulary.length){
-                if(circle === 1){
+                if (circle === 1 && !this.state.endlessPlaying){
                     return;
                 }
-                circle = 1;
+                circle = circle+1;
                 vocabIndex = 0;
                 enFirst = !enFirst;
                 prevLang = enFirst ? "uk" : "en";
