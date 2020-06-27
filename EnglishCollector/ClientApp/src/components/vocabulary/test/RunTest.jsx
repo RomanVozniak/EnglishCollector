@@ -35,7 +35,7 @@ export class RunTest extends React.Component {
     render() {
         const { counter, hideTranlation, langFirst } = { ...this.state };
         const { phrase, translation } = { ...this.props.vocabulary[counter] };
-        const count = this.props.vocabulary.length;
+        const count = this.props.vocabulary.length - 1;
         const firstWord = (langFirst == lang_uk ? translation : phrase)
         const secondWord = (hideTranlation ? "" : (langFirst == lang_uk ? phrase : translation))
 
@@ -43,8 +43,9 @@ export class RunTest extends React.Component {
             label: hideTranlation ? "Check" : "Next",
             action: () => {
                 if (!hideTranlation) {
+                    let nextCounter = (counter == count ? 0 : (counter + 1));
                     this.setState({
-                        counter: counter + 1,
+                        counter: nextCounter,
                         hideTranlation: true
                     });
                 } else {
@@ -58,7 +59,7 @@ export class RunTest extends React.Component {
                 <thead>
                     <tr>
                         <th><Button onClick={this.startTest}>Start Test</Button></th>
-                        <th>{(counter + 1) + ' of ' + count}</th>
+                        <th>{(counter + 1) + ' of ' + (count + 1)}</th>
                         <th><Button onClick={this.changeLang}>Change Language (current {langFirst == lang_uk ? "uk" : "en"})</Button></th>
                     </tr>
                 </thead>
